@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Launch Check
-Version: 1.0.0
+Version: 1.1.0
 Plugin URI: http://matchboxdesigngroup.com/plugins/
-Description: Ensure that you have made your site visible to search engines, changed the default description and added Google Analytics before launch.
+Description: Ensure that you have made your site visible to search engines, changed the default description and added Google's Universal Analytics before launch.
 Author: Matchbox Design Group
 Author URI: http://matchboxdesigngroup.com/
 License: GPL v3
@@ -59,23 +59,31 @@ function mdg_check_blog_description() {
  */
 function mdg_check_analytics_plugin() {
 	$default_desc	= get_option( 'blogdescription');
-	
-		if ( is_plugin_active( 'google-analytics-for-wordpress/googleanalytics.php' ) ) {
+		if ( is_plugin_active( 'universal-analytics/universalanalytics.php' ) ) {
 			return;	
 		}
 
 		echo "<div id='message' class='error'>";
-		echo "<p><strong>" . __( "Easy killer: You're not tracking your site yet.", 'mdg-launch-check' ) . "</strong> " . sprintf( __( "How are you going to track those awesome visitors? Go %sgo install the Google Analytics plugin%s now.", 'mdg-launch-check' ), "<a href='" . admin_url( 'update.php?action=install-plugin&plugin=google-analytics-for-wordpress&_wpnonce=336c473101' ) . "'>", "</a>" ) . "</p></div>";
+		echo "<p><strong>" . __( "Easy killer: You're not tracking your site yet.", 'mdg-launch-check' ) . "</strong> " . sprintf( __( "How are you going to track those awesome visitors? Go %sinstall the Universal Analytics plugin%s now.", 'mdg-launch-check' ), "<a href='" . admin_url( 'plugin-install.php?tab=plugin-information&plugin=universal-analytics&TB_iframe=true' ) . "'class='thickbox'>", "</a>" ) . "</p></div>";
 }
-
 
 
   //plugin is activated
 
 function mdg_admin_check() {
-		mdg_check_blog_description();
-		mdg_is_blog_public();
-		mdg_check_analytics_plugin();
-		
+	// To disable screens from displaying the alerts add the current screens base to the disabled screens
+	$current_screen   = get_current_screen();
+	$disabled_screens = array(
+		'plugin-install',  	// Hide the message on the Universal Analytics popup
+		'update',						// Hide the message when updating plugins
+	);
+	if ( in_array( $current_screen->base, $disabled_screens ) ) {
+		return;
+	} // if()
+
+	mdg_check_blog_description();
+	mdg_is_blog_public();
+	mdg_check_analytics_plugin();
+	
 }
 add_action( 'admin_head', 'mdg_admin_check' );
