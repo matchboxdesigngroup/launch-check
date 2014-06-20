@@ -47,6 +47,7 @@ function mdg_is_blog_public() {
 
 	echo wp_kses( $alert, 'post' );
 }
+add_action( 'lc_init', 'mdg_is_blog_public' );
 
 
 
@@ -72,6 +73,7 @@ function mdg_check_blog_description() {
 
 	echo wp_kses( $alert, 'post' );
 }
+add_action( 'lc_init', 'mdg_check_blog_description' );
 
 
 
@@ -96,6 +98,7 @@ function mdg_check_analytics_plugin() {
 
 	echo wp_kses( $alert, 'post' );
 }
+add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
 
 
@@ -116,8 +119,6 @@ function mdg_admin_check() {
 		return;
 	} // if()
 
-	mdg_check_blog_description();
-	mdg_is_blog_public();
-	mdg_check_analytics_plugin();
+	do_action( 'lc_init' );
 }
 add_action( 'admin_head', 'mdg_admin_check' );
