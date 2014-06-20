@@ -26,6 +26,23 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
 
+
+/**
+ * Handles checking if a plugin is active on both single and multi-site installs.
+ *
+ * <code>mdg_is_plugin_active( 'plugin-directory/plugin-file.php')</code>
+ *
+ * @param   string    $plugin  The name of the plugin sub-directory/file.
+ *
+ * @return  boolean            if plugin is actived.
+ */
+function mdg_is_plugin_active( $plugin ) {
+	if ( is_plugin_active_for_network( $plugin ) or is_plugin_active( $plugin ) ) {
+		return true;
+	} // if()
+
+	return false;
+} // mdg_is_plugin_active()
 /**
  * Display an error message when the blog is set to private.
  *
