@@ -142,6 +142,34 @@ function mdg_warning_dismiss() {
 } // mdg_warning_dismiss()
 add_action( 'admin_init', 'mdg_warning_dismiss' );
 
+
+
+/**
+ * Checks if the user has dismissed the current warning.
+ *
+ * <code>
+ * if ( mdg_warning_has_been_dismissed( 'warning_key' ) ) {
+ * 	return;
+ * }
+ *
+ * @param   string   $key  The key value of the current warning.
+ *
+ * @return  boolean        If the user has dismissed the warning.
+ */
+function mdg_warning_has_been_dismissed( $key ) {
+	global $current_user;
+	$user_id        = $current_user->ID;
+	$user_dismissed = get_user_meta( $user_id, "_{$key}_dismiss_warning", true );
+
+	if ( $user_dismissed != '' or $user_dismissed == 'true' ) {
+		return true;
+	} // if()
+
+	return false;
+} // mdg_warning_has_been_dismissed()
+
+
+
 /**
  * Plugin setup
  *
