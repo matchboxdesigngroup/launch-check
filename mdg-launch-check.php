@@ -104,6 +104,30 @@ function mdg_warning_has_been_dismissed( $key ) {
 
 	return false;
 } // mdg_warning_has_been_dismissed()
+
+
+function mdg_alert_wrap( $alert_content, $class = 'error', $alert_key = '' ) {
+	if ( $alert_content == '' ) {
+		return '';
+	} // if()
+
+	if ( $class == 'warning' ) {
+		$disable_link = '';
+		if ( $alert_key != '' ) {
+			$reuquest_uri = str_replace( '/wp-admin', '', $_SERVER['REQUEST_URI'] );
+			$current_page = admin_url( $reuquest_uri );
+			$disbale_url  = ( strpos( $current_page, '?' ) === false ) ? "{$current_page}?{$alert_key}=0" : "{$current_page}&{$alert_key}=0";
+			$disable_link = " <a href='{$disbale_url}'>Dismiss</a>";
+		} // if()
+
+		return "<div class='error' style='border-left: 4px solid #ffba00;'><p>{$alert_content}{$disable_link}</p></div>";
+	} // if()
+
+	return "<div class='{$class}'><p>{$alert_content}</p></div>";
+}
+
+
+
 /**
  * Display an error message when the blog is set to private.
  *
@@ -121,13 +145,12 @@ function mdg_is_blog_public() {
 	}
 
 	$alert  = '';
-	$alert .= '<div id="message" class="error">';
-	$alert .= '<p>';
-	$alert .= '<strong>' . __( "Huge SEO Issue: You're blocking access to robots.", 'mdg-launch-check' ) . '</strong> ';
+	$alert .= '<strong>';
+	$alert .= __( "Huge SEO Issue: You're blocking access to robots.", 'mdg-launch-check' );
+	$alert .= '</strong> ';
 	$alert .= sprintf( __( 'You must %sgo to your Reading Settings%s and uncheck the box for Search Engine Visibility.', 'mdg-launch-check' ), '<a href="' . admin_url( 'options-reading.php' ) . '">', '</a>' );
-	$alert .= '</p></div>';
 
-	echo wp_kses( $alert, 'post' );
+	echo wp_kses( mdg_alert_wrap( $alert ), 'post' );
 }
 add_action( 'lc_init', 'mdg_is_blog_public' );
 
@@ -150,14 +173,12 @@ function mdg_check_blog_description() {
 	}
 
 	$alert  = '';
-	$alert .= '<div id="message" class="error">';
-	$alert .= '<p><strong>';
+	$alert .= '<strong>';
 	$alert .= __( "Whoa there partner: You're Still using the default tagline.", 'mdg-launch-check' );
 	$alert .= '</strong> ';
 	$alert .= sprintf( __( 'You must %sgo to your General Settings%s and change the Tagline to a description for this site.', 'mdg-launch-check' ), '<a href="' . admin_url( 'options-general.php' ) . '">', '</a>' );
-	$alert .= '</p></div>';
 
-	echo wp_kses( $alert, 'post' );
+	echo wp_kses( mdg_alert_wrap( $alert ), 'post' );
 }
 add_action( 'lc_init', 'mdg_check_blog_description' );
 
@@ -174,19 +195,18 @@ add_action( 'lc_init', 'mdg_check_blog_description' );
  */
 function mdg_check_analytics_plugin() {
 	$default_desc = get_option( 'blogdescription' );
-	if ( is_plugin_active( 'universal-analytics/universalanalytics.php' ) ) {
+
+	if ( mdg_is_plugin_active( 'universal-analytics/universalanalytics.php' ) ) {
 		return;
 	}
 
 	$alert  = '';
-	$alert .= '<div id="message" class="error">';
-	$alert .= '<p><strong>';
+	$alert .= '<strong>';
 	$alert .= __( "Easy killer: You're not tracking your site yet.", 'mdg-launch-check' );
 	$alert .= '</strong> ';
 	$alert .= sprintf( __( 'How are you going to track those awesome visitors? Go %sinstall the Universal Analytics plugin%s now.', 'mdg-launch-check' ), '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin=universal-analytics&TB_iframe=true' ) . '" class="thickbox">', '</a>' );
-	$alert .= '</p></div>';
 
-	echo wp_kses( $alert, 'post' );
+	echo wp_kses( mdg_alert_wrap( $alert ), 'post' );
 }
 add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
