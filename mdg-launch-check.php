@@ -29,6 +29,10 @@ along with this program.  If not, see <http://www.gnu.org/licenses/>.
 /**
  * Display an error message when the blog is set to private.
  *
+ * <code>add_action( 'lc_init', 'mdg_is_blog_public' );</code>
+ *
+ * @since 1.0.0
+ *
  * @return void
  */
 function mdg_is_blog_public() {
@@ -53,6 +57,10 @@ add_action( 'lc_init', 'mdg_is_blog_public' );
 
 /**
  * Display an error message when using the default WordPress tagline.
+ *
+ * <code>add_action( 'lc_init', 'mdg_check_blog_description' );</code>
+ *
+ * @since 1.0.0
  *
  * @return void
  */
@@ -80,6 +88,10 @@ add_action( 'lc_init', 'mdg_check_blog_description' );
 /**
  * Check to see if the Google Analytics for WordPress plugin is installed.
  *
+ * <code>add_action( 'lc_init', 'mdg_check_analytics_plugin' );</code>
+ *
+ * @since 1.0.0
+ *
  * @return void
  */
 function mdg_check_analytics_plugin() {
@@ -104,6 +116,10 @@ add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
 /**
  * Plugin setup
+ *
+ * <code>add_action( 'admin_head', 'mdg_admin_check' );</code>
+ *
+ * @since 1.0.0
  *
  * @return  void
  */
