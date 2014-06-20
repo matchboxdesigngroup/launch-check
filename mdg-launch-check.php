@@ -43,6 +43,67 @@ function mdg_is_plugin_active( $plugin ) {
 
 	return false;
 } // mdg_is_plugin_active()
+
+
+
+/**
+ * Sets the dismiss status for a warning for the current user.
+ *
+ * <code>
+ * <a href="{$current_page_url}?warning_get_var_key=0"
+ * add_action( 'admin_init', 'mdg_warning_dismiss' );
+ * </code>
+ *
+ * @since   1.1.1
+ *
+ * @return  void
+ */
+function mdg_warning_dismiss() {
+	global $current_user;
+	$user_id = $current_user->ID;
+
+	// The possible warning $_GET var key.
+	// @todo possibly global or if moved into class make it a property.
+	$warning_get_var_keys = array(
+		'lc_brute_protect',
+	);
+
+	// If user clicks to dismiss the notice, add that to their user meta
+	foreach ( $warning_get_var_keys as $key_value ) {
+		if ( isset($_GET[$key_value]) && '0' == $_GET[$key_value] ) {
+			add_user_meta( $user_id, "_{$key_value}_dismiss_warning", 'true' );
+		} // if()
+	} // foreach()
+} // mdg_warning_dismiss()
+add_action( 'admin_init', 'mdg_warning_dismiss' );
+
+
+
+/**
+ * Checks if the user has dismissed the current warning.
+ *
+ * <code>
+ * if ( mdg_warning_has_been_dismissed( 'warning_key' ) ) {
+ * 	return;
+ * }
+ *
+ * @todo solve the warning aka update-nag class better than injecting a style into the element.
+ *
+ * @param   string   $key  The key value of the current warning.
+ *
+ * @return  boolean        If the user has dismissed the warning.
+ */
+function mdg_warning_has_been_dismissed( $key ) {
+	global $current_user;
+	$user_id        = $current_user->ID;
+	$user_dismissed = get_user_meta( $user_id, "_{$key}_dismiss_warning", true );
+
+	if ( $user_dismissed != '' or $user_dismissed == 'true' ) {
+		return true;
+	} // if()
+
+	return false;
+} // mdg_warning_has_been_dismissed()
 /**
  * Display an error message when the blog is set to private.
  *
@@ -131,59 +192,13 @@ add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
 
 /**
- * Sets the dismiss status for a warning for the current user.
- *
- * <code>
- * <a href="{$current_page_url}?warning_get_var_key=0"
- * add_action( 'admin_init', 'mdg_warning_dismiss' );
- * </code>
- *
- * @since   1.1.1
  *
  * @return  void
  */
-function mdg_warning_dismiss() {
-	global $current_user;
-	$user_id = $current_user->ID;
-
-	// The possible warning $_GET var key.
-	// @todo possibly global or if moved into class make it a property.
-	$warning_get_var_keys = array();
-
-	// If user clicks to dismiss the notice, add that to their user meta
-	foreach ( $warning_get_var_keys as $key_value ) {
-		if ( isset($_GET[$key_value]) && '0' == $_GET[$key_value] ) {
-			add_user_meta( $user_id, "_{$key_value}_dismiss_warning", 'true' );
-		} // if()
-	} // foreach()
-} // mdg_warning_dismiss()
-add_action( 'admin_init', 'mdg_warning_dismiss' );
 
 
-
-/**
- * Checks if the user has dismissed the current warning.
- *
- * <code>
- * if ( mdg_warning_has_been_dismissed( 'warning_key' ) ) {
- * 	return;
- * }
- *
- * @param   string   $key  The key value of the current warning.
- *
- * @return  boolean        If the user has dismissed the warning.
- */
-function mdg_warning_has_been_dismissed( $key ) {
-	global $current_user;
-	$user_id        = $current_user->ID;
-	$user_dismissed = get_user_meta( $user_id, "_{$key}_dismiss_warning", true );
-
-	if ( $user_dismissed != '' or $user_dismissed == 'true' ) {
-		return true;
 	} // if()
 
-	return false;
-} // mdg_warning_has_been_dismissed()
 
 
 
