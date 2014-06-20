@@ -113,6 +113,34 @@ function mdg_check_analytics_plugin() {
 add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
 
+/**
+ * Sets the dismiss status for a warning for the current user.
+ *
+ * <code>
+ * <a href="{$current_page_url}?warning_get_var_key=0"
+ * add_action( 'admin_init', 'mdg_warning_dismiss' );
+ * </code>
+ *
+ * @since   1.1.1
+ *
+ * @return  void
+ */
+function mdg_warning_dismiss() {
+	global $current_user;
+	$user_id = $current_user->ID;
+
+	// The possible warning $_GET var key.
+	// @todo possibly global or if moved into class make it a property.
+	$warning_get_var_keys = array();
+
+	// If user clicks to dismiss the notice, add that to their user meta
+	foreach ( $warning_get_var_keys as $key_value ) {
+		if ( isset($_GET[$key_value]) && '0' == $_GET[$key_value] ) {
+			add_user_meta( $user_id, "_{$key_value}_dismiss_warning", 'true' );
+		} // if()
+	} // foreach()
+} // mdg_warning_dismiss()
+add_action( 'admin_init', 'mdg_warning_dismiss' );
 
 /**
  * Plugin setup
