@@ -211,14 +211,34 @@ function mdg_check_analytics_plugin() {
 add_action( 'lc_init', 'mdg_check_analytics_plugin' );
 
 
+
 /**
+ * Check to see if the BruteProtect WordPress plugin is installed and activated.
  *
  * @return  void
  */
-
-
+function mdg_check_brute_protect() {
+	// Check for ButeProtect
+	$plugin = 'bruteprotect/bruteprotect.php';
+	if ( mdg_is_plugin_active( 'bruteprotect/bruteprotect.php' ) ) {
+		return;
 	} // if()
 
+	$key = 'lc_brute_protect';
+
+	if ( mdg_warning_has_been_dismissed( $key ) ) {
+		return;
+	} // if()
+
+	$alert  = '';
+	$alert .= '<strong>';
+	$alert .= __( 'No Brute Protect Message.', 'mdg-launch-check' );
+	$alert .= '</strong> ';
+	$alert .= sprintf( __( 'Some question? Go %sinstall the Brute Protect plugin%s now.', 'mdg-launch-check' ), '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin=bruteprotect&TB_iframe=true' ) . '" class="thickbox">', '</a>' );
+
+	echo wp_kses( mdg_alert_wrap( $alert, 'warning', $key ), 'post' );
+}
+add_action( 'lc_init', 'mdg_check_brute_protect' );
 
 
 
