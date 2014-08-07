@@ -232,9 +232,9 @@ function mdg_check_brute_protect() {
 
 	$alert  = '';
 	$alert .= '<strong>';
-	$alert .= __( 'No Brute Protect Message.', 'mdg-launch-check' );
+	$alert .= __( 'Hackers are jerks!', 'mdg-launch-check' );
 	$alert .= '</strong> ';
-	$alert .= sprintf( __( 'Some question? Go %sinstall the Brute Protect plugin%s now.', 'mdg-launch-check' ), '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin=bruteprotect&TB_iframe=true' ) . '" class="thickbox">', '</a>' );
+	$alert .= sprintf( __( 'You need to protect your site against brute force attacks. Go %sinstall the BruteProtect plugin%s now. It\'s FREE!', 'mdg-launch-check' ), '<a href="' . admin_url( 'plugin-install.php?tab=plugin-information&plugin=bruteprotect&TB_iframe=true' ) . '" class="thickbox">', '</a>' );
 
 	echo wp_kses( mdg_alert_wrap( $alert, 'warning', $key ), 'post' );
 }
