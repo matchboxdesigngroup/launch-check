@@ -1,9 +1,9 @@
 <?php
 /*
 Plugin Name: Launch Check
-Version: 1.1.0
+Version: 1.2.0
 Plugin URI: http://matchboxdesigngroup.com/plugins/
-Description: Ensure that you have made your site visible to search engines, changed the default description and added Google's Universal Analytics before launch.
+Description: Ensure that you have made your site visible to search engines, changed the default description, added Google's Universal Analytics and installed BruteProtect before launch.
 Author: Matchbox Design Group
 Author URI: http://matchboxdesigngroup.com/
 License: GPL v3
